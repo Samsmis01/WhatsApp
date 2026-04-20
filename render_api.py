@@ -157,7 +157,7 @@ def admin_stats():
     """Stats pour l'admin (protégé par clé)"""
     api_key = request.headers.get('X-API-Key')
     
-    if api_key != 'ADMIN_SECRET_KEY_123':
+    if api_key != 'arcane@M12':
         return jsonify({'error': 'Unauthorized'}), 401
     
     conn = sqlite3.connect(DB_PATH)
